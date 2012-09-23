@@ -19,11 +19,20 @@ class Cocoa::TopMenuViewController < Cocoa::UITableViewController
         row = indexPath[:row].to_i
         send(@data[indexPath[:row].to_i][:func], self._navigationController)
     end
+
+    define C::Void, :addListItem do
+        send('show_hello', self._navigationController)
+    end
 end
 
 def show_tableview_menu(navi)
     viewController = Cocoa::TopMenuViewController._alloc._initWithStyle Cocoa::Const::UITableViewStylePlain 
     viewController[:title] = "MobiRuby"
+    add_button = Cocoa::UIBarButtonItem._alloc._initWithTitle 'Add', 
+        :style, Cocoa::Const::UIBarButtonItemStylePlain,
+        :target, viewController, 
+        :action, selector('addListItem')
+    viewController[:navigationItem][:rightBarButtonItem] = add_button
     viewController.data = [
         {:title => 'SameGame', :func => 'show_samegame'},
         {:title => 'Hello world', :func => 'show_hello'},
